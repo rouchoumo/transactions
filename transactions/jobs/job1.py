@@ -23,11 +23,11 @@ def run_transformations(spark):
                           .option("delimiter", ",")
                           .load(dir_path + "/products_1.csv"))
 
-    dbutils.widgets.get("file_path")
+    file_path = dbutils.widgets.get("file_path")
     transactions_df_bronze = (spark.read.format("csv")
                               .option("header", "true")
                               .option("delimiter", ",")
-                              .load(dir_path + "/transactions_1.csv"))
+                              .load(file_path))
 
     transactions_df_silver = (transactions_df_bronze
                               .join(clients_df_bronze.select("id", "account_id"),
