@@ -1,3 +1,5 @@
+import logging
+
 from pyspark.sql.functions import col, lit, concat, when, lpad, split
 import transactions.config.properties
 from transactions.config import properties
