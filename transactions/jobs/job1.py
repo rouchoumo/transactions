@@ -11,8 +11,13 @@ import argparse
 def run_transformations(spark):
     logging.basicConfig(level=logging.INFO)
     parser = argparse.ArgumentParser()
-    parser.add_argument("file_path")
+    parser.add_argument("--file_path", required=True)
     args = parser.parse_args()
+
+    file_path = args.file_path
+    print(f"file_path: {file_path}")
+    
+    file_path = args.file_path
     dir_path = properties.get_dir_path()
     clients_df_bronze = (spark.read.format("csv")
                          .option("header", "true")
@@ -30,8 +35,7 @@ def run_transformations(spark):
                           .option("header", "true")
                           .option("delimiter", ",")
                           .load(dir_path + "/products_1.csv"))
-    file_path = args.file_path
-    print(f"file_path: {file_path}")
+    
     transactions_df_bronze = (spark.read.format("csv")
                               .option("header", "true")
                               .option("delimiter", ",")
