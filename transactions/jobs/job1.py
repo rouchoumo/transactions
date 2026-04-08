@@ -1,6 +1,6 @@
 import logging
 import os
-
+import sys
 from pyspark.sql.functions import col, lit, concat, when, lpad, split
 import transactions.config.properties
 from transactions.config import properties
@@ -27,7 +27,14 @@ def run_transformations(spark):
                           .option("delimiter", ",")
                           .load(dir_path + "/products_1.csv"))
 
-    file_path = os.environ.get("file_path")
+    args = sys.argv
+
+    # args = ['job1.py', 'file_path', 'abfss://...']
+
+    file_path = None
+    for i in range(len(args)):
+        if args[i] == "file_path":
+            file_path = args[i + 1]
     print(f"file_path: {file_path}")
     transactions_df_bronze = (spark.read.format("csv")
                               .option("header", "true")
