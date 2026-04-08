@@ -11,8 +11,8 @@ import argparse
 def run_transformations(spark):
     logging.basicConfig(level=logging.INFO)
     parser = argparse.ArgumentParser()
-    args = parser.parse_args()
     parser.add_argument("file_path")
+    args = parser.parse_args()
     dir_path = properties.get_dir_path()
     clients_df_bronze = (spark.read.format("csv")
                          .option("header", "true")
