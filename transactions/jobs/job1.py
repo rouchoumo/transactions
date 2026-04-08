@@ -5,10 +5,14 @@ from pyspark.sql.functions import col, lit, concat, when, lpad, split
 import transactions.config.properties
 from transactions.config import properties
 from delta.tables import DeltaTable
+import argparse
 
 
 def run_transformations(spark):
     logging.basicConfig(level=logging.INFO)
+    parser = argparse.ArgumentParser()
+    args = parser.parse_args()
+    parser.add_argument("file_path")
     dir_path = properties.get_dir_path()
     clients_df_bronze = (spark.read.format("csv")
                          .option("header", "true")
@@ -26,15 +30,7 @@ def run_transformations(spark):
                           .option("header", "true")
                           .option("delimiter", ",")
                           .load(dir_path + "/products_1.csv"))
-
-    args = sys.argv
-
-    # args = ['job1.py', 'file_path', 'abfss://...']
-
-    file_path = None
-    for i in range(len(args)):
-        if args[i] == "file_path":
-            file_path = args[i + 1]
+    file_path = args.file_path
     print(f"file_path: {file_path}")
     transactions_df_bronze = (spark.read.format("csv")
                               .option("header", "true")
