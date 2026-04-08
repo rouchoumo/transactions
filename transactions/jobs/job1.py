@@ -8,6 +8,7 @@ from delta.tables import DeltaTable
 
 
 def run_transformations(spark):
+    logging.basicConfig(level=logging.INFO)
     dir_path = properties.get_dir_path()
     clients_df_bronze = (spark.read.format("csv")
                          .option("header", "true")
