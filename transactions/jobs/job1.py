@@ -28,7 +28,7 @@ def run_transformations(spark):
                           .load(dir_path + "/products_1.csv"))
 
     file_path = os.environ.get("file_path")
-    logging.info(f"file_path: {file_path}")
+    print(f"file_path: {file_path}")
     transactions_df_bronze = (spark.read.format("csv")
                               .option("header", "true")
                               .option("delimiter", ",")
