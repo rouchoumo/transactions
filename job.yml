@@ -1,7 +1,7 @@
 resources:
   jobs:
     transaction_job:
-      name: transaction_job2
+      name: transaction_job
   
       parameters:
         - name: catalog
