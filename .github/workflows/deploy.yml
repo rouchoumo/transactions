@@ -25,6 +25,9 @@ jobs:
         token = ${{ secrets.DATABRICKS_TOKEN_DEV }}
         EOF
     - name: Validate bundle
+      env:
+        DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST_DEV }}
+        DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_DEV }}
       run: databricks bundle validate -t dev
 
     - name: Deploy bundle to dev
