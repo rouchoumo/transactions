@@ -1,0 +1,37 @@
+resources:
+  jobs:
+    transaction_job:
+      name: transaction_job
+  
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema 
+          default: ${var.schema}
+        - name: dir_path
+          default: ${var.dir_path}
+        - name: file_path
+          default: ${var.file_path}
+
+      
+      tasks:
+        - task_key: transactions
+          spark_python_task:
+            python_file: src/main.py
+            parameters:
+              - --file_path
+              - "{{job.parameters.file_path}}"
+          environment_key: Default
+
+
+      environments:
+        - environment_key: Default
+          spec:
+            environment_version: "5"
+            dependencies:
+              - -r requirements.txt
+
+      queue:
+        enabled: true
+
+      performance_target: PERFORMANCE_OPTIMIZED

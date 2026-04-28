@@ -1,0 +1,24 @@
+bundle:
+  name: transactions_bundle
+
+include:
+  - job.yml 
+  
+variables:
+  catalog:
+  schema:
+  dir_path:
+  file_path:
+
+targets:
+  dev:
+    default: true
+    workspace:
+      host: https://adb-7405604882809556.16.azuredatabricks.net
+      profile: dev
+
+    variables:
+      catalog: mytestazuredbmr001
+      schema: dev
+      dir_path: https://mystorageaccountmr001.blob.core.windows.net/mrstoragecontainer/dev/input
+      file_path: abfss://mrstoragecontainer@mystorageaccountmr001.dfs.core.windows.net/dev/input/transactions_3.csv
