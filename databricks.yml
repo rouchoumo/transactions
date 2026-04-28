@@ -15,7 +15,6 @@ targets:
     default: true
     workspace:
       host: https://adb-7405604882809556.16.azuredatabricks.net
-      profile: dev
 
     variables:
       catalog: mytestazuredbmr001

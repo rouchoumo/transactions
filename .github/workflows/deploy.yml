@@ -1,35 +1,41 @@
 name: Deploy Databricks Bundle
+
 on:
   push:
     branches:
       - db_master
   workflow_dispatch:
+
 jobs:
   deploy-dev:
     runs-on: ubuntu-latest
+    environment: dev   # ✅ REQUIRED for your secrets
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-    - name: Install Databricks CLI
-      run: |
-        curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
-        databricks --version
-    - name: Configure Databricks (dev)
-      run: |
-        mkdir -p ~/.databricks
-        cat <<EOF > ~/.databrickscfg
-        [dev]
-        host = ${{ secrets.DATABRICKS_HOST_DEV }}
-        token = ${{ secrets.DATABRICKS_TOKEN_DEV }}
-        EOF
-    - name: Validate bundle
-      env:
-        DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST_DEV }}
-        DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_DEV }}
-      run: databricks bundle validate -t dev
+      - name: Install Databricks CLI
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+          databricks --version
 
-    - name: Deploy bundle to dev
-      run: databricks bundle deploy -t dev
+      - name: Debug secrets
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST_DEV }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_DEV }}
+        run: |
+          echo "HOST=${#DATABRICKS_TOKEN}"
+          echo "TOKEN LENGTH=${#DATABRICKS_TOKEN}"
 
+      - name: Validate bundle
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST_DEV }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_DEV }}
+        run: databricks bundle validate -t dev
+
+      - name: Deploy bundle to dev
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST_DEV }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_DEV }}
+        run: databricks bundle deploy -t dev
